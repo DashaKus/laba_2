@@ -30,14 +30,14 @@ public class Formula extends JFrame{    //JFrame- окна с рамкой
 
     private ButtonGroup radioButtons = new ButtonGroup();
     private Box hboxFormulaType = Box.createHorizontalBox();
+
     private int formulaId = 1;
     private double sum = 0;
     private boolean flag = false;
 
-    public Double caculated1(Double x,Double y,Double z)
-    {
-        return Math.pow(Math.pow(Math.sin(y)+y*y+Math.pow(Math.E,Math.cos(y)),1/2)+
-                Math.pow( Math.log(z*z)+Math.sin(Math.PI*x*x),1/3),1/2);
+    public Double caculated1(Double x, Double y, Double z) {
+        return Math.sin(Math.log(y) + Math.sin(Math.PI * y * y)) *
+                Math.pow((x * x + Math.sin(z) + Math.pow(Math.E,Math.cos(z))),0.25);
     }
 
     public Double caculated2(Double x,Double y,Double z) {
@@ -83,21 +83,24 @@ public class Formula extends JFrame{    //JFrame- окна с рамкой
 
             Box hboxVariables = Box.createHorizontalBox(); //создание контейнера коробка с горизонтальной укладкой
             hboxVariables.setBorder(BorderFactory.createLineBorder(Color.PINK)); //рамка
-            hboxVariables.add(Box.createHorizontalGlue()); //клей для максимального удаления
+            //hboxVariables.add(Box.createHorizontalGlue()); //клей для максимального удаления
             hboxVariables.add(labelForX);  //подпись для х
             hboxVariables.add(Box.createHorizontalStrut(10)); //распорка между надписью и полем для значений
             hboxVariables.add(textFieldX);
             hboxVariables.add(Box.createHorizontalStrut(100));
+            hboxVariables.add(Box.createHorizontalGlue());
 
             hboxVariables.add(labelForY);
             hboxVariables.add(Box.createHorizontalStrut(10));
             hboxVariables.add(textFieldY);
             hboxVariables.add(Box.createHorizontalStrut(100));
+            hboxVariables.add(Box.createHorizontalGlue());
 
             hboxVariables.add(labelForZ);
             hboxVariables.add(Box.createHorizontalStrut(10));
             hboxVariables.add(textFieldZ);
-            hboxVariables.add(Box.createHorizontalStrut(100));
+           // hboxVariables.add(Box.createHorizontalGlue());
+          //  hboxVariables.add(Box.createHorizontalStrut(100));
 
             JLabel labelForResult = new JLabel("Результат:"); // создание подписи для поля с результатом
             textFieldResult = new JTextField("0", 10);// создание текстового поля
@@ -136,9 +139,9 @@ public class Formula extends JFrame{    //JFrame- окна с рамкой
                             result=caculated1(x,y,z);
                         else
                             result=caculated2(x,y,z);
-                        if(flag) sum+=result;
-                        else sum=0;
-                    textFieldResult.setText(toString().format("%-10.3f%n", (result + sum)));
+                       // if(flag) sum+=result;
+                      //  else sum=0;
+                    textFieldResult.setText(toString().format("%-10.3f%n", (result)));
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(Formula.this,
                             "Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа", JOptionPane.WARNING_MESSAGE);
@@ -149,24 +152,22 @@ public class Formula extends JFrame{    //JFrame- окна с рамкой
             M.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ev) {
                     Double x = Double.parseDouble(textFieldX.getText());
-                    Double  y= Double.parseDouble(textFieldY.getText());
+                    Double y= Double.parseDouble(textFieldY.getText());
                     Double z = Double.parseDouble(textFieldZ.getText());
                     Double result;
                     if(formulaId==1)
                         result=caculated1(x,y,z);
                     else
                         result=caculated2(x,y,z);
-                   // if(flag)
                         sum+=result;
-                   // else sum=0;
                     textFieldMemory.setText(toString().format("%-10.3f%n", (sum)));
-                   // flag = false;
                 }
             });
 
             MC.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent ev) {
-                    textFieldMemory.setText("0");
+                    sum = 0.0;
+                    textFieldMemory.setText(toString().format("%-10.3f%n", (sum)));
                 }
             });
 
@@ -178,6 +179,7 @@ public class Formula extends JFrame{    //JFrame- окна с рамкой
                     textFieldZ.setText("0");
                     textFieldY.setText("0");
                     textFieldResult.setText("0");
+                    textFieldMemory.setText("0");
                 } });
             Box hboxButtons = Box.createHorizontalBox();
             hboxButtons.add(Box.createHorizontalGlue());
